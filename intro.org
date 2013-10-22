@@ -1,0 +1,114 @@
+* Special forms
+
+Son aquellas construcciones que no evaluan sus argumentos de la manera usual.
+
+** defun
+Esta es la típica plantilla de un comando. Los comandos son funciones que
+pueden ser invocadas por el usuario debido a que utilizan `interactive' en su
+definición.
+
+#+BEGIN_SRC elisp
+  (defun NOMBRE-DE-FUNCION (ARGUMENTOS...)
+    "DOCUMENTACION-OPCIONAL"
+    (interactive "INFORMACION-SOBRE-LOS-ARGUMENTOS") ; opcional
+    CUERPO-DE-LA-FUNCION...)
+#+END_SRC
+
+Al utilizar `interactive' en la definición de la función estás queriendo decir
+que tu función puede ser invocada directamente por el usuario a través de `M-x'.
+La función `interactive' recibe un argumento que es opcional y que consiste de
+una cadena que contine uno o más códigos seguidos opcionalmente de un prompt y
+que es un modo de decir a Emacs Lisp que pregunte al usuario por los valores
+que la función recibe.
+
+Códigos comunes son:
+
+- `b' El nombre de un buffer existente.
+- `f' El nombre de un fichero existente.
+- `p' Un número.
+- `r' El Punto y la Huella, pasados a la función como dos argumentos numéricos.
+** let
+#+BEGIN_SRC elisp
+  (let VARLIST BODY...)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (let ((VARIABLE VALUE)
+        (VARIABLE VALUE)
+        ...)
+    BODY...)
+#+END_SRC
+
+VARLIST es una lista de símbolos que son asignados el valor `nil' o, en lugar,
+de un símbolo puedes utilizar una 2-tupla donde al primer elemento es asignado
+el valor al que evalua el segundo elemento.
+** if
+*** if-then
+#+BEGIN_SRC elisp
+  (if PRUEBA-DE-VERDADERO-O-FALSO
+      ACCION-IS-ES-VERDADERO)
+#+END_SRC
+*** if-then-else
+#+BEGIN_SRC elisp
+  (if PRUEBA-DE-VERDADERO-O-FALSO
+      ACCION-IS-ES-VERDADERO
+    ACCION-IS-ES-FALSO)
+#+END_SRC
+
+Si en lugar de una acción, necesitas ejecutar varias acciones en los casos
+verdadero o falso, utiliza la función `progn' para agrupar las distintas acciones
+en una sola.
+
+#+BEGIN_SRC elisp
+  (if PRUEBA-DE-VERDADERO-O-FALSO
+      (progn
+        ACCION-IS-ES-VERDADERO
+        ACCION-IS-ES-VERDADERO
+        ...)
+    (progn
+      ACCION-IS-ES-FALSO
+      ACCION-IS-ES-FALSO
+      ...))
+#+END_SRC
+** save-excursion
+Esta función es muy común ya que antes de ejecutar sus acciones contenidas
+guarda la localización del Punto y la Huella y el buffer actual, y los reestablece
+al final. Es algo así como un gestor de contexto en Python.
+La utilidad de esta función se debe a que por lo general, las funciones que
+manipulan texto modifican el Punto, la Huella y el buffer actual y esta es una forma
+de impedir que se cambie el contexto del usuario al ejecutar estas funciones de
+edición.
+
+#+BEGIN_SRC elisp
+  (save-excursion
+    ACCIONES...)
+#+END_SRC
+*** Point (Punto)
+El Point (o Punto) es la localización del cursor dentro de un buffer y su valor
+es un número entero. Imagina un buffer como una gran lista de caracteres y al
+Punto como el índice en el cual se encuentra el cursor apuntando.
+*** Mark (Huella)
+La Huella es otra posición dentro del buffer y su valor es frecuentemente
+establecido automáticamente por otros comandos (por ejemplo `C-S') o puede ser
+establecido directamente por el usuario a través del comando `set-mark-command'
+(`C-<SPC>').
+Establecer el valor de la Huella varias veces hace que la el valor anterior sea
+guardado en el "Mark ring" o "Anillo de huellas" para que puedas acceder a ese
+valor más tarde si lo necesitas.
+Para extraer el último valor que tuvo la Huella del Anillo de huellas utiliza
+`C-U C-<SPC>`.
+*** Region (Región)
+La región del buffer delimitada por el Punto y la Huella se denomina Región y
+se puede restringir el impacto de muchos comandos a solo esta región en lugar
+de a todo el buffer o ser utilizada directamente por otros comandos como
+`count-lines-region', `kill-region' y `print-region'.
+* Truth and Falsehood (Veracidad y Falsedad)
+En Emacs Lisp todo es verdadero excepto `nil' o la lista vacía `()' (dado que
+nil y () son exactamente lo mismo). Incluso una lista con un solo elemento `nil'
+es verdadero.
+
+#+BEGIN_SRC elisp
+  (if '(nil)
+      (message "verdadero")
+    (message "falso"))
+#+END_SRC
