@@ -1,4 +1,4 @@
-* Special forms
+* Construcciones or formas especiales
 
 Son aquellas construcciones que no evaluan sus argumentos de la manera usual.
 
