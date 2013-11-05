@@ -1,4 +1,4 @@
-* Construcciones or formas especiales
+* Construcciones o formas especiales
 
 Son aquellas construcciones que no evaluan sus argumentos de la manera usual.
 
@@ -93,9 +93,9 @@ establecido automáticamente por otros comandos (por ejemplo `C-S') o puede ser
 establecido directamente por el usuario a través del comando `set-mark-command'
 (`C-<SPC>').
 Establecer el valor de la Marca varias veces hace que la el valor anterior sea
-guardado en el "Mark ring" o "Anillo de huellas" para que puedas acceder a ese
+guardado en el "Mark ring" o "Anillo de Marcas" para que puedas acceder a ese
 valor más tarde si lo necesitas.
-Para extraer el último valor que tuvo la Marca del Anillo de huellas utiliza
+Para extraer el último valor que tuvo la Marca del Anillo de marcas utiliza
 `C-U C-<SPC>`.
 *** Region (Región)
 La región del buffer delimitada por el Punto y la Marca se denomina Región y
