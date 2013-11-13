@@ -1,4 +1,30 @@
-* Construcciones or formas especiales
+* Modos de ejecución
+
+Emacs lisp, como el resto de la familia, puede estar en dos modos:
+
+- código: La evaluación interpreta que el primer elemento de la lista es un 
+  operador y lo aplica al resto de los elementos.
+
+- datos: La evaluacion no interpreta la lista y la devuelve tal cual es para 
+  ser utilizada posteriormente por un operador
+
+El paso entre codigo y datos se realiza mediante el operador quote, que 
+convierte la informacion siguiente en datos. La forma corta para escribirlo es 
+mediante el caracter: \'
+
+#+BEGIN_SRC elisp
+  '(elemento1 elemento2 elemento3)
+#+END_SRC
+
+Esto permite pasar listas como argumentos:
+
+#+BEGIN_SRC elisp
+  (message '(1 2 3))
+#+END_SRC
+
+** TODO quasiquoting
+
+* Construcciones o formas especiales
 
 Son aquellas construcciones que no evaluan sus argumentos de la manera usual.
 
@@ -27,7 +53,9 @@ Códigos comunes son:
 - `f' El nombre de un fichero existente.
 - `p' Un número.
 - `r' El Punto y la Marca, pasados a la función como dos argumentos numéricos.
+
 ** let
+
 #+BEGIN_SRC elisp
   (let VARLIST BODY...)
 #+END_SRC
@@ -46,13 +74,13 @@ el valor al que evalua el segundo elemento.
 *** if-then
 #+BEGIN_SRC elisp
   (if PRUEBA-DE-VERDADERO-O-FALSO
-      ACCION-IS-ES-VERDADERO)
+      ACCION-SI-ES-VERDADERO)
 #+END_SRC
 *** if-then-else
 #+BEGIN_SRC elisp
   (if PRUEBA-DE-VERDADERO-O-FALSO
-      ACCION-IS-ES-VERDADERO
-    ACCION-IS-ES-FALSO)
+      ACCION-SI-ES-VERDADERO
+    ACCION-SI-ES-FALSO)
 #+END_SRC
 
 Si en lugar de una acción, necesitas ejecutar varias acciones en los casos
@@ -62,12 +90,12 @@ en una sola.
 #+BEGIN_SRC elisp
   (if PRUEBA-DE-VERDADERO-O-FALSO
       (progn
-        ACCION-IS-ES-VERDADERO
-        ACCION-IS-ES-VERDADERO
+        ACCION-SI-ES-VERDADERO
+        ACCION-SI-ES-VERDADERO
         ...)
     (progn
-      ACCION-IS-ES-FALSO
-      ACCION-IS-ES-FALSO
+      ACCION-SI-ES-FALSO
+      ACCION-SI-ES-FALSO
       ...))
 #+END_SRC
 ** save-excursion
@@ -93,9 +121,9 @@ establecido automáticamente por otros comandos (por ejemplo `C-S') o puede ser
 establecido directamente por el usuario a través del comando `set-mark-command'
 (`C-<SPC>').
 Establecer el valor de la Marca varias veces hace que la el valor anterior sea
-guardado en el "Mark ring" o "Anillo de huellas" para que puedas acceder a ese
+guardado en el "Mark ring" o "Anillo de Marcas" para que puedas acceder a ese
 valor más tarde si lo necesitas.
-Para extraer el último valor que tuvo la Marca del Anillo de huellas utiliza
+Para extraer el último valor que tuvo la Marca del Anillo de marcas utiliza
 `C-U C-<SPC>`.
 *** Region (Región)
 La región del buffer delimitada por el Punto y la Marca se denomina Región y
@@ -111,4 +139,29 @@ es verdadero.
   (if '(nil)
       (message "verdadero")
     (message "falso"))
+#+END_SRC
+
+* Variables
+
+** setq
+
+Para establecer una variable (que no una constante) se utiliza setq para ser 
+utilizado posteriormente en otras partes del código.
+
+#+BEGIN_SRC elisp
+  (setq NOMBRE-DE-VARIABLE VALOR)
+#+END_SRC
+
+Se puede utilizar un solo setq para asignar el valor a multiples variables:
+
+#+BEGIN_SRC elisp
+  (setq NOMBRE-DE-VARIABLE VALOR
+        NOMBRE-DE-VARIABLE2 VALOR2)
+#+END_SRC
+
+Si se va a utilizar para crear una lista, es conveniente precederla de una 
+comilla para prevenir su ejecucion.
+
+#+BEGIN_SRC elisp
+    (setq una-lista '(primero segundo tercero))
 #+END_SRC
